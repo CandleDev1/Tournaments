@@ -32,6 +32,7 @@ use pocketmine\utils\SingletonTrait;
 
     public function onEnable(): void
     {
+        $this->saveDefaultConfig();
         $this->getServer()->getCommandMap()->register("TournamentCommand", new TournamentCommand());
         $this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
         
