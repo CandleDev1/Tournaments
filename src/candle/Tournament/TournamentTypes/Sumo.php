@@ -90,9 +90,7 @@ use pocketmine\world\Position;
         }
         $this->players[] = $player;
         $player->getInventory()->clearAll();
-        //Test
         $player->getArmorInventory()->clearAll();
-
         $this->TeleportArena($player, "Sumo");
         $this->AnnouncePlayerJoined($player, "Sumo");
         $this->setKit($player, "backlobby");
