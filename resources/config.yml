@@ -2,7 +2,6 @@
 # Example: §cTournament §r RedRover Tournament has started use /tournament spectate
 prefix: "§cTournament §r"
 
-
 #Default OP permission.
 HostTournaments: "pocketmine.group.operator"
 
@@ -26,22 +25,22 @@ TournamentWorlds:
   #RedRover's main world or waiting world depending on how you want it keep in mind they teleport to somewhere else when the game starts u can edit that below by changing,
   #RedTeamSpawn and BlueTeamSpawn
   RedRover:
-    x: 0
-    y: 99
-    z: 0
-    world: "lunar_spawn"
+    x: 306
+    y: 65
+    z: 366
+    world: "RedRover"
   #Team blue spawnpoint when the RedRover Tournament has started.
   BlueTeamSpawn:
-    x: 0
-    y: 120
-    z: 0
-    world: "lunar_spawn"
+    x: 330
+    y: 65
+    z: 306
+    world: "RedRover"
   #Team Red spawnpoint when the RedRover Tournament has started.
   RedTeamSpawn:
-    x: 0
-    y: 150
-    z: 0
-    world: "lunar_spawn"
+    x: 281
+    y: 65
+    z: 306
+    world: "RedRover"
   Sumo:
     x: 0
     y: 90

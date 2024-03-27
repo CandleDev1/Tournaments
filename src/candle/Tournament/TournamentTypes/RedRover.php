@@ -115,13 +115,14 @@ use pocketmine\world\Position;
             $this->setKit($player, "RedRover");
             $this->AnnounceTournamentStarted("RedRover");
             if(isset($this->blueTeam[$player->getName()])) {
-                $player->teleport(new Position(loader::getInstance()->getConfig()->getNested("TournamentWorlds.RedTeamSpawn.x"), loader::getInstance()->getConfig()->getNested("TournamentWorlds.BlueTeamSpawn.y"), loader::getInstance()->getConfig()->getNested("TournamentWorlds.BlueTeamSpawn.z"), Server::getInstance()->getWorldManager()->getWorldByName(loader::getInstance()->getConfig()->getNested("TournamentWorlds.BlueTeamSpawn.world"))));
+                $player->teleport(new Position(loader::getInstance()->getConfig()->getNested("TournamentWorlds.BlueTeamSpawn.x"), loader::getInstance()->getConfig()->getNested("TournamentWorlds.BlueTeamSpawn.y"), loader::getInstance()->getConfig()->getNested("TournamentWorlds.BlueTeamSpawn.z"), Server::getInstance()->getWorldManager()->getWorldByName(loader::getInstance()->getConfig()->getNested("TournamentWorlds.BlueTeamSpawn.world"))));
             } elseif(isset($this->redTeam[$player->getName()])) {
                 $player->teleport(new Position(loader::getInstance()->getConfig()->getNested("TournamentWorlds.RedTeamSpawn.x"), loader::getInstance()->getConfig()->getNested("TournamentWorlds.RedTeamSpawn.y"), loader::getInstance()->getConfig()->getNested("TournamentWorlds.RedTeamSpawn.z"), Server::getInstance()->getWorldManager()->getWorldByName(loader::getInstance()->getConfig()->getNested("TournamentWorlds.RedTeamSpawn.world"))));            }
         }
     }
 
 
+    ##TODO: unset player when leave | and fix leave error something with player isnt online.
     public function tick(): void
     {
         $this->sendScore();
