@@ -115,10 +115,9 @@ use pocketmine\world\Position;
             $this->setKit($player, "RedRover");
             $this->AnnounceTournamentStarted("RedRover");
             if(isset($this->blueTeam[$player->getName()])) {
-                $player->teleport(new Position(0,120,0, Server::getInstance()->getWorldManager()->getWorldByName("lunar_spawn")));
+                $player->teleport(new Position(loader::getInstance()->getConfig()->getNested("TournamentWorlds.RedTeamSpawn.x"), loader::getInstance()->getConfig()->getNested("TournamentWorlds.BlueTeamSpawn.y"), loader::getInstance()->getConfig()->getNested("TournamentWorlds.BlueTeamSpawn.z"), Server::getInstance()->getWorldManager()->getWorldByName(loader::getInstance()->getConfig()->getNested("TournamentWorlds.BlueTeamSpawn.world"))));
             } elseif(isset($this->redTeam[$player->getName()])) {
-                $player->teleport(new Position(0,150,0, Server::getInstance()->getWorldManager()->getWorldByName("lunar_spawn")));
-            }
+                $player->teleport(new Position(loader::getInstance()->getConfig()->getNested("TournamentWorlds.RedTeamSpawn.x"), loader::getInstance()->getConfig()->getNested("TournamentWorlds.RedTeamSpawn.y"), loader::getInstance()->getConfig()->getNested("TournamentWorlds.RedTeamSpawn.z"), Server::getInstance()->getWorldManager()->getWorldByName(loader::getInstance()->getConfig()->getNested("TournamentWorlds.RedTeamSpawn.world"))));            }
         }
     }
 

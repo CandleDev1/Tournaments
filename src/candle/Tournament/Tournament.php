@@ -25,58 +25,67 @@ abstract class Tournament {
 
     public function loadArena(Player $player, string $tournament): void {
         match ($tournament) {
-            "RedRover" => Server::getInstance()->getWorldManager()->loadWorld("lunar_spawn"),
-            "Sumo" => Server::getInstance()->getWorldManager()->loadWorld("mine"),
+            "RedRover" => Server::getInstance()->getWorldManager()->loadWorld(loader::getInstance()->getConfig()->getNested("TournamentWorlds.RedRover.world")),
+            "Sumo" => Server::getInstance()->getWorldManager()->loadWorld( loader::getInstance()->getConfig()->getNested("TournamentWorlds.Sumo.world")),
             default => "world doesnt exist"
         };
     }
 
     public function TeleportArena(Player $player, string $tournament): void {
+        $config = loader::getInstance()->getConfig();
         match ($tournament) {
-            "RedRover" => $player->teleport(new Position(0,99,0, Server::getInstance()->getWorldManager()->getWorldByName("lunar_spawn"))),
-            "Sumo" => $player->teleport(new Position(0,90,0, Server::getInstance()->getWorldManager()->getWorldByName("mine"))),
+            "RedRover" => $player->teleport(new Position($config->getNested("TournamentWorlds.RedRover.x"),$config->getNested("TournamentWorlds.RedRover.y"),$config->getNested("TournamentWorlds.RedRover.z"), Server::getInstance()->getWorldManager()->getWorldByName($config->getNested("TournamentWorlds.RedRover.world")))),
+            "Sumo" => $player->teleport(new Position($config->getNested("TournamentWorlds.Sumo.x"),$config->getNested("TournamentWorlds.Sumo.y"),$config->getNested("TournamentWorlds.Sumo.z"), Server::getInstance()->getWorldManager()->getWorldByName($config->getNested("TournamentWorlds.Sumo.world")))),
             default => "World Doesnt exists/loaded"
         };
     }
 
     public function TeleportSpawn(Player $player, string $tournament): void {
+        $config = loader::getInstance()->getConfig();
         match ($tournament) {
-            "RedRover" => $player->teleport(new Position(120,120,120, Server::getInstance()->getWorldManager()->getWorldByName("world"))),
-            "Sumo" => $player->teleport(new Position(120,120,120, Server::getInstance()->getWorldManager()->getWorldByName("world")))
+            "RedRover" => $player->teleport(new Position($config->getNested("TournamentWorlds.Spawn.x"),$config->getNested("TournamentWorlds.Spawn.y"),$config->getNested("TournamentWorlds.Spawn.z"), Server::getInstance()->getWorldManager()->getWorldByName($config->getNested("TournamentWorlds.Spawn.world")))),
+            "Sumo" => $player->teleport(new Position($config->getNested("TournamentWorlds.Spawn.x"),$config->getNested("TournamentWorlds.Spawn.y"),$config->getNested("TournamentWorlds.Spawn.z"), Server::getInstance()->getWorldManager()->getWorldByName($config->getNested("TournamentWorlds.Spawn.world")))),
+            default => ""
         };
     }
 
     public function AnnounceTournament(string $tournament): void {
         match ($tournament) {
-            "RedRover" => Server::getInstance()->broadcastMessage(loader::PREFIX . "RedRover event has begun use /tournament join RedRover to enter the Tournament!")
+            "RedRover" => Server::getInstance()->broadcastMessage(loader::getInstance()->getConfig()->get("prefix") . loader::getInstance()->getConfig()->getNested("messages.RedRover.StartTournament")),
+            "Sumo" =>Server::getInstance()->broadcastMessage(loader::getInstance()->getConfig()->get("prefix")  . loader::getInstance()->getConfig()->getNested("messages.Sumo.StartTournament")),
+            default => ""
         };
     }
 
     public function AnnouncePlayerJoined(Player $player, string $tournament): void {
         match ($tournament) {
-            "RedRover" => Server::getInstance()->broadcastMessage(loader::PREFIX . $player->getName() . " has joined the RedRover Tournament!"),
-            "Sumo" => Server::getInstance()->broadcastMessage(loader::PREFIX . $player->getName() . " has joined the Sumo Tournament!"),
+            "RedRover" => Server::getInstance()->broadcastMessage(loader::getInstance()->getConfig()->get("prefix") . $player->getName() . loader::getInstance()->getConfig()->getNested("messages.RedRover.PlayerJoinTournament")),
+            "Sumo" => Server::getInstance()->broadcastMessage(loader::getInstance()->getConfig()->get("prefix") . $player->getName() . loader::getInstance()->getConfig()->getNested("messages.Sumo.PlayerJoinTournament")),
+            default => ""
         };
     }
 
     public function AnnounceTournamentStarted(string $tournament): void {
         match ($tournament) {
-            "RedRover" => Server::getInstance()->broadcastMessage(loader::PREFIX . "RedRover Tournament has started use /tournament spectate"),
-            "Sumo" => Server::getInstance()->broadcastMessage(loader::PREFIX . "Sumo Tournament has started use /tournament spectate"),
+            "RedRover" => Server::getInstance()->broadcastMessage(loader::getInstance()->getConfig()->get("prefix") . "RedRover Tournament has started use /tournament spectate"),
+            "Sumo" => Server::getInstance()->broadcastMessage(loader::getInstance()->getConfig()->get("prefix") . "Sumo Tournament has started use /tournament spectate"),
             default => ""
         };
     }
 
     public function AnnouncePlayerLeft(Player $player, string $tournament): void {
         match ($tournament) {
-            "RedRover" => $player->sendMessage(loader::PREFIX . "You have left the RedRover Tournament"),
-            "Sumo" => $player->sendMessage(loader::PREFIX . "You have left the Sumo Tournament")
+            "RedRover" => $player->sendMessage(loader::getInstance()->getConfig()->get("prefix") . loader::getInstance()->getConfig()->getNested("messages.RedRover.PlayerLeaveTournament")),
+            "Sumo" => $player->sendMessage(loader::getInstance()->getConfig()->get("prefix") . loader::getInstance()->getConfig()->getNested("messages.Sumo.PlayerLeaveTournament")),
+            default => ""
         };
     }
 
     public function AnnouncePlayerSpectate(Player $player, string $tournament): void {
         match ($tournament) {
-            "RedRover" => $player->sendMessage(loader::PREFIX . "You have started spectating the Tournament RedRover")
+            "RedRover" => $player->sendMessage(loader::getInstance()->getConfig()->get("prefix") . loader::getInstance()->getConfig()->getNested("messages.RedRover.SpectateTournament")),
+            "Sumo" => $player->sendMessage(loader::getInstance()->getConfig()->get("prefix") . loader::getInstance()->getConfig()->getNested("messages.Sumo.SpectateTournament")),
+            default => ""
         };
     }
 
@@ -97,10 +106,10 @@ abstract class Tournament {
 
         if(count($this->blueTeam) < count($this->redTeam)) {
             $this->blueTeam[$player->getName()] = $player;
-            $player->sendMessage(loader::PREFIX . "You've joined the " . TextFormat::BLUE . "Blue" . TextFormat::RESET . " team.");
+            $player->sendMessage(loader::getInstance()->getConfig()->get("prefix") . "You've joined the " . TextFormat::BLUE . "Blue" . TextFormat::RESET . " team.");
         } else {
             $this->redTeam[$player->getName()] = $player;
-            $player->sendMessage(loader::PREFIX . "You've joined the " . TextFormat::RED . "Red" . TextFormat::RESET . " team.");
+            $player->sendMessage(loader::getInstance()->getConfig()->get("prefix") . "You've joined the " . TextFormat::RED . "Red" . TextFormat::RESET . " team.");
         }
     }
 

@@ -14,7 +14,7 @@ class TournamentCommand extends Command
 
     public function __construct(){
         parent::__construct("tournament");
-        $this->setPermission("pocketmine.group.operator");
+        $this->setPermission(loader::getInstance()->getConfig()->get("HostTournaments"));
         $this->setUsage("/tournament create/join/leave");
     }
 
