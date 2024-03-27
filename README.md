@@ -6,5 +6,8 @@ for me to add to this Tournament system dm (qzotx)
 - [X] {Error Support ✔️}
 
 
+Credits to:
+- [x] Sergittos, for contribute to this project [@Sergittos][https://github.com/Sergittos]
+- [x] Candle, coding the project [@Candle][https://github.com/CandleDev1]
 Tournament example:
 Soon
