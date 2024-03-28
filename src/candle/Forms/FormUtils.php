@@ -5,6 +5,7 @@ namespace candle\Forms;
 use candle\loader;
 use candle\Tournament\TournamentTypes\RedRover;
 use candle\Tournament\TournamentTypes\Sumo;
+use candle\TournamentPlayer;
 use EasyUI\element\Button;
 use EasyUI\element\Dropdown;
 use EasyUI\element\Input;
@@ -96,19 +97,28 @@ class FormUtils
         $startedTournament = $redRover->state === RedRover::waiting;
         $startedTournamentSumo = $sumo->state === Sumo::waiting;
         if ($startedTournament) {
-            $playerCount = count(Server::getInstance()->getWorldManager()->getWorldByName("lunar_spawn")->getPlayers());
+            $playerCount = count(Server::getInstance()->getWorldManager()->getWorldByName(loader::getInstance()->getConfig()->getNested("TournamentWorlds.RedRover.world"))->getPlayers());
             $button = new Button("RedRover\nPlayers: " . $playerCount);
             $button->setSubmitListener(function (Player $player) {
                 $redrover = loader::getInstance()->redrover;
+                if($player->isInGame("RedRover") === true) {
+                    $player->sendMessage( loader::getInstance()->getConfig()->get("prefix"). loader::getInstance()->getConfig()->getNested( "messages.RedRover.AlreadyInTournament"));
+                    return;
+                }
+                #TODO: add max players.
                 $redrover->HandlePlayerJoin($player);
             });
             $form->addButton($button);
         }
         if($startedTournamentSumo) {
-            $playerCount = count(Server::getInstance()->getWorldManager()->getWorldByName("mine")->getPlayers());
+            $playerCount = count(Server::getInstance()->getWorldManager()->getWorldByName(loader::getInstance()->getConfig()->getNested("TournamentWorlds.Sumo.world"))->getPlayers());
             $buttonsumo = new Button("Sumo\nPlayers: " . $playerCount);
-            $buttonsumo->setSubmitListener(function (Player $player) {
+            $buttonsumo->setSubmitListener(function (TournamentPlayer $player) {
                 $sumo = loader::getInstance()->sumo;
+                if($player->isInGame("Sumo") === true) {
+                    $player->sendMessage( loader::getInstance()->getConfig()->get("prefix"). loader::getInstance()->getConfig()->getNested( "messages.Sumo.AlreadyInTournament"));
+                    return;
+                }
                 $sumo->HandlePlayerJoin($player);
             });
             $form->addButton($buttonsumo);
@@ -121,7 +131,7 @@ class FormUtils
         $startedTournament = $redRover->state === RedRover::playing || $redRover->state === RedRover::countdown;
         $startedTournamentSumo = $sumo->state === Sumo::playing || $sumo->state === Sumo::countdown;
         if ($startedTournament) {
-            $playerCount = count(Server::getInstance()->getWorldManager()->getWorldByName("lunar_spawn")->getPlayers());
+            $playerCount = count(Server::getInstance()->getWorldManager()->getWorldByName(loader::getInstance()->getConfig()->getNested("TournamentWorlds.RedRover.world"))->getPlayers());
             $button = new Button("RedRover\nPlayers: " . $playerCount);
             $button->setSubmitListener(function (Player $player) {
                 $redrover = loader::getInstance()->redrover;
@@ -130,7 +140,7 @@ class FormUtils
             $form->addButton($button);
         }
         if($startedTournamentSumo) {
-            $playerCount = count(Server::getInstance()->getWorldManager()->getWorldByName("mine")->getPlayers());
+            $playerCount = count(Server::getInstance()->getWorldManager()->getWorldByName(loader::getInstance()->getConfig()->getNested("TournamentWorlds.Sumo.world"))->getPlayers());
             $buttonsumo = new Button("Sumo\nPlayers: " . $playerCount);
             $buttonsumo->setSubmitListener(function (Player $player) {
                 $sumo = loader::getInstance()->sumo;

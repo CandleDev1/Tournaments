@@ -81,7 +81,7 @@ class EventListener implements Listener
                 if($player->isInGame("RedRover") === true) {
                     loader::getInstance()->redrover->HandlePlayerLeave($player);
                     $event->cancel();
-                }elseif($player->isInGame("RedRover") === true) {
+                }elseif($player->isInGame("Sumo") === true) {
                     loader::getInstance()->sumo->HandlePlayerLeave($player);
                     $event->cancel();
                 }

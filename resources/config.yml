@@ -12,12 +12,14 @@ messages:
     PlayerLeaveTournament: "You have left the RedRover Tournament"
     SpectateTournament: "You have started spectating the Tournament RedRover"
     AnnounceTournamentStarted: "RedRover Tournament has started use /tournament spectate"
+    AlreadyInTournament: "You are already in the RedRover Tournament"
   Sumo:
     StartTournament: "Sumo event has begun use /tournament join Sumo to enter the Tournament!"
     PlayerJoinTournament: " has joined the Sumo Tournament!"
     PlayerLeaveTournament: "You have left the Sumo Tournament"
     SpectateTournament: "You have started spectating the Tournament Sumo"
     AnnounceTournamentStarted: "Sumo Tournament has started use /tournament spectate"
+    AlreadyInTournament: "You are already in the Sumo Tournament"
   CommandMessages:
   #soon
 

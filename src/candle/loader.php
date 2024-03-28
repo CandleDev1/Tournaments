@@ -3,7 +3,6 @@
 namespace candle;
 
 use AllowDynamicProperties;
-use candle\Commands\TournamentCommand;
 use candle\Tasks\TournamentTick;
 use candle\Tournament\TournamentSystem;
 use candle\Tournament\TournamentTypes\RedRover;
@@ -33,13 +32,12 @@ use pocketmine\utils\SingletonTrait;
     public function onEnable(): void
     {
         $this->saveDefaultConfig();
-        $this->getServer()->getCommandMap()->register("TournamentCommand", new TournamentCommand());
         $this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
         
         $this->redrover = new RedRover();
         $this->sumo = new Sumo();
         $this->Tournament = new TournamentSystem();
-        $this->getScheduler()->scheduleRepeatingTask(new TournamentTick($this, ), 20);
+        $this->getScheduler()->scheduleRepeatingTask(new TournamentTick($this), 20);
         $this->getServer()->getWorldManager()->loadWorld("lunar_spawn");
 
     }

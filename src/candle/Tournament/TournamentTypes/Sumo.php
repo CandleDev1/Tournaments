@@ -85,7 +85,7 @@ use pocketmine\world\Position;
 
     public function HandlePlayerJoin(TournamentPlayer $player): void {
         if($this->state === Sumo::playing) {
-            $player->sendMessage(loader::PREFIX . "The RedRover event has already begun.");
+            $player->sendMessage(loader::PREFIX . "The Sumo event has already begun.");
             return;
         }
         $this->players[] = $player;
@@ -94,7 +94,7 @@ use pocketmine\world\Position;
         $this->TeleportArena($player, "Sumo");
         $this->AnnouncePlayerJoined($player, "Sumo");
         $this->setKit($player, "backlobby");
-        $player->setInGame(true);
+        $player->setInGame(true, "Sumo");
     }
 
     public function HandlePlayerLeave(TournamentPlayer $player): void {
@@ -104,7 +104,7 @@ use pocketmine\world\Position;
         $player->getArmorInventory()->clearAll();
         $player->getInventory()->setItem(4, VanillaItems::EMERALD()->setCustomName("§bTournamenet §f(right click to use)"));
         ScoreboardManager::remove($player);
-        $player->setInGame(false);
+        $player->setInGame(false, "Sumo");
         $player->setGamemode(GameMode::SURVIVAL);
         unset($this->players[array_search($player, $this->players, true)]);
     }
@@ -112,7 +112,7 @@ use pocketmine\world\Position;
     public function HandleSpectators(TournamentPlayer $player): void {
         $this->TeleportArena($player, "Sumo");
         $player->setGamemode(GameMode::SPECTATOR);
-        $player->setInGame(true);
+        $player->setInGame(true, "Sumo");
     }
 
 
@@ -197,7 +197,7 @@ use pocketmine\world\Position;
                 case RedRover::playing:
                     ScoreboardManager::new($player, "3", "§c§bTournaments");
                     ScoreboardManager::setLine($player, 1, TextFormat::GRAY . '');
-                    ScoreboardManager::setLine($player, 2, "§bEvent " . TextFormat::WHITE . "(RedRover)");
+                    ScoreboardManager::setLine($player, 2, "§bEvent " . TextFormat::WHITE . "(Sumo)");
                     ScoreboardManager::setLine($player, 3, "§bPlayers: " . TextFormat::WHITE . count($this->players));
                     ScoreboardManager::setLine($player, 4, "§bRound: #" . TextFormat::WHITE . $this->rounds);
                     ScoreboardManager::setLine($player, 5, "§f");
