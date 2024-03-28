@@ -67,7 +67,7 @@ abstract class Tournament {
 
     public function AnnounceTournamentStarted(string $tournament): void {
         match ($tournament) {
-            "RedRover" => Server::getInstance()->broadcastMessage(loader::getInstance()->getConfig()->get("prefix") . "RedRover Tournament has started use /tournament spectate"),
+            "RedRover" => Server::getInstance()->broadcastMessage(loader::getInstance()->getConfig()->get("prefix") . loader::getInstance()->getConfig()->getNested("messages.RedRover.AnnounceTournamentStarted")),
             "Sumo" => Server::getInstance()->broadcastMessage(loader::getInstance()->getConfig()->get("prefix") . "Sumo Tournament has started use /tournament spectate"),
             default => ""
         };
@@ -113,6 +113,16 @@ abstract class Tournament {
         }
     }
 
+    public function kickTeam(Player $player): void
+    {
+        if ($this->getTeam($player) === "Blue") {
+            unset($this->blueTeam[$player->getName()]);
+        }
+        if ($this->getTeam($player) === "Red") {
+            unset($this->redTeam[$player->getName()]);
+        }
+    }
+
     public function getTeam(Player $player): string
     {
         $team = "N/A";
@@ -124,6 +134,8 @@ abstract class Tournament {
         }
         return $team;
     }
+
+
 
 
 

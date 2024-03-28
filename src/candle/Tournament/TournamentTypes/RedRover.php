@@ -15,6 +15,10 @@ use pocketmine\player\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use pocketmine\world\Position;
+use pocketmine\world\sound\AnvilBreakSound;
+use pocketmine\math\Vector3;
+use pocketmine\world\sound\AnvilUseSound;
+use pocketmine\world\sound\XpCollectSound;
 
 #[AllowDynamicProperties] class RedRover extends Tournament {
 
@@ -30,6 +34,7 @@ use pocketmine\world\Position;
 
     /** @var Player[] */
     public array $players = [];
+
 
     public function setUpArena(Player $player): void {
         $this->loadArena($player, "RedRover");
@@ -82,7 +87,7 @@ use pocketmine\world\Position;
         $this->setTeam($player);
         $this->AnnouncePlayerJoined($player, "RedRover");
         $this->setKit($player, "backlobby");
-        $player->setInGame(true);
+        $player->setInGame(true, "RedRover");
     }
 
     public function HandlePlayerLeave(TournamentPlayer $player): void {
@@ -92,7 +97,7 @@ use pocketmine\world\Position;
         $player->getArmorInventory()->clearAll();
         $player->getInventory()->setItem(4, VanillaItems::EMERALD()->setCustomName("§bTournamenet §f(right click to use)"));
         ScoreboardManager::remove($player);
-        $player->setInGame(false);
+        $player->setInGame(false, "RedRover");
         $player->setGamemode(GameMode::SURVIVAL);
         unset($this->players[array_search($player, $this->players, true)]);
     }
@@ -100,7 +105,7 @@ use pocketmine\world\Position;
     public function HandleSpectators(TournamentPlayer $player) {
         $this->TeleportArena($player, "RedRover");
         $player->setGamemode(GameMode::SPECTATOR);
-        $player->setInGame(true);
+        $player->setInGame(true, "RedRover");
     }
 
 
@@ -139,6 +144,11 @@ use pocketmine\world\Position;
                 }
                 if ($this->countdown > 0) {
                     $this->countdown--;
+                    foreach ($this->players as $player) {
+                        $player->sendTitle(TextFormat::MINECOIN_GOLD . gmdate("i:s", $this->countdown));
+                        //Still debating which sound i wanne use
+                        $player->getWorld()->addSound(new Vector3($player->getPosition()->getX(), $player->getPosition()->getY(), $player->getPosition()->getZ()), new XpCollectSound());
+                    }
                     $this->fight = false;
                     return;
                 }
@@ -149,15 +159,12 @@ use pocketmine\world\Position;
                     $this->Fighting();
                 }
 
-                ##TODO: Fix the win thingie cant figure out why it isnt working?
-
-                if (0 >= count($this->redTeam)) {
+                if (count($this->redTeam) > count($this->blueTeam)) {
                     Server::getInstance()->broadcastMessage(loader::PREFIX . "Team red has won the RedRover Tournament");
-                    return;
-                }
-                if (0 >= count($this->blueTeam)) {
+                    $this->StopTournament();
+                }elseif(count($this->blueTeam) > count($this->redTeam)) {
                     Server::getInstance()->broadcastMessage(loader::PREFIX . "Team blue has won the RedRover Tournament");
-                    return;
+                    $this->StopTournament();
                 }
         }
     }
@@ -196,6 +203,18 @@ use pocketmine\world\Position;
     }
 
 
+
+    public function StopTournament(): void {
+        foreach ($this->players as $player) {
+            $this->HandlePlayerLeave($player);
+        }
+        $this->players = [];
+        $this->state = RedRover::idle;
+        $this->countdown = 10;
+        $this->fight = false;
+        $this->redTeam = [];
+        $this->blueTeam = [];
+    }
 
 
 }

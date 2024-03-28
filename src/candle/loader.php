@@ -39,7 +39,7 @@ use pocketmine\utils\SingletonTrait;
         $this->redrover = new RedRover();
         $this->sumo = new Sumo();
         $this->Tournament = new TournamentSystem();
-        $this->getScheduler()->scheduleRepeatingTask(new TournamentTick($this), 20);
+        $this->getScheduler()->scheduleRepeatingTask(new TournamentTick($this, ), 20);
         $this->getServer()->getWorldManager()->loadWorld("lunar_spawn");
 
     }

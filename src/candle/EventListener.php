@@ -61,13 +61,16 @@ class EventListener implements Listener
         $player = $event->getPlayer();
         $event->setDrops([]);
         $RedRover = loader::getInstance()->redrover;
+        $Sumo = loader::getInstance()->sumo;
 
         if($player instanceof TournamentPlayer){
-            if($player->isInGame() === true) {
-                $RedRover->HandlePlayerLeave($player);
+            if($player->isInGame("RedRover") === true) {
+                $RedRover->HandleSpectators($player);
+                $RedRover->kickTeam($player);
+            }elseif($player->isInGame("Sumo")) {
+                $Sumo->HandleSpectators($player);
             }
         }
-
     }
 
     public function PlayerChatEvent(PlayerChatEvent $event): void {
@@ -75,8 +78,10 @@ class EventListener implements Listener
         $message = $event->getMessage();
         if($message === "leave") {
             if($player instanceof TournamentPlayer) {
-                if($player->isInGame() === true) {
+                if($player->isInGame("RedRover") === true) {
                     loader::getInstance()->redrover->HandlePlayerLeave($player);
+                    $event->cancel();
+                }elseif($player->isInGame("RedRover") === true) {
                     loader::getInstance()->sumo->HandlePlayerLeave($player);
                     $event->cancel();
                 }
