@@ -54,8 +54,15 @@ class EventListener implements Listener
             $RedRover = loader::getInstance()->redrover;
             $Sumo = loader::getInstance()->sumo;
             if ($player instanceof TournamentPlayer and $killer instanceof TournamentPlayer) {
-                if ($RedRover->state === RedRover::waiting || $RedRover->state === RedRover::countdown || loader::getInstance()->redrover->getTeam($player) === loader::getInstance()->redrover->getTeam($killer) || $Sumo->state === Sumo::waiting || $Sumo->state === Sumo::countdown) {
-                    $event->cancel();
+                if($killer->isInGame("RedRover") === true || $player->isInGame("RedRover") === true) {
+                    if ($RedRover->state === RedRover::waiting || $RedRover->state === RedRover::countdown || loader::getInstance()->redrover->getTeam($player) === loader::getInstance()->redrover->getTeam($killer)) {
+                        $event->cancel();
+                    }
+                }
+                if($player->isInGame("Sumo") === true) {
+                    if($Sumo->state === Sumo::waiting) {
+                        $event->cancel();
+                    }
                 }
             }
         }

@@ -24,7 +24,6 @@ use pocketmine\world\Position;
     const int Fighting = 4;
 
     public bool $fight = false;
-
     public int $state = Sumo::idle;
 
     public int $countdown = 10;
@@ -146,6 +145,7 @@ use pocketmine\world\Position;
                 }
                 if($this->countdown > 0) {
                     $this->countdown--;
+                    $this->fight = false;
                     return;
                 }
                 $this->state = Sumo::playing;
@@ -165,10 +165,10 @@ use pocketmine\world\Position;
                 if($this->fight) {
                     if($this->fightcooldown !== null and $this->fightcooldown > 0) {
                         foreach ($this->players as $player) {
-                            $player->sendTitle(TextFormat::GOLD . $this->fightcooldown);
-                            $this->fightcooldown--;
+                            $c = $this->fightcooldown--;
+                            $player->sendTitle(TextFormat::GOLD . gmdate("i:s", $c));
                         }
-                    } elseif ($this->fightcooldown !== null and $this->fightcooldown <= 0) {
+                    } elseif ($this->fightcooldown !== null) {
                         foreach ($this->players as $player) {
                             $this->fightcooldown = null;
                         }

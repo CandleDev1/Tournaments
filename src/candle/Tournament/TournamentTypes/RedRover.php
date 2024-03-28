@@ -101,7 +101,7 @@ use pocketmine\world\sound\XpCollectSound;
         unset($this->players[array_search($player, $this->players, true)]);
     }
 
-    public function HandleSpectators(TournamentPlayer $player) {
+    public function HandleSpectators(TournamentPlayer $player): void {
         $this->TeleportArena($player, "RedRover");
         $player->setGamemode(GameMode::SPECTATOR);
         $player->setInGame(true, "RedRover");
@@ -126,7 +126,6 @@ use pocketmine\world\sound\XpCollectSound;
     }
 
 
-    ##TODO: unset player when leave | and fix leave error something with player isnt online.
     public function tick(): void
     {
         $this->sendScore();
