@@ -3,6 +3,7 @@
 namespace candle;
 
 use AllowDynamicProperties;
+use candle\Session\SessionListener;
 use candle\Tasks\TournamentTick;
 use candle\Tournament\TournamentSystem;
 use candle\Tournament\TournamentTypes\RedRover;
@@ -33,6 +34,7 @@ use pocketmine\utils\SingletonTrait;
     {
         $this->saveDefaultConfig();
         $this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new SessionListener(), $this);
         
         $this->redrover = new RedRover();
         $this->sumo = new Sumo();

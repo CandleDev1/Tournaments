@@ -72,7 +72,7 @@ use pocketmine\world\sound\XpCollectSound;
         $this->setupArena($player);
     }
 
-    public function HandlePlayerJoin(TournamentPlayer $player): void {
+    public function HandlePlayerJoin(Player $player): void {
         if($this->state === RedRover::playing) {
             $player->sendMessage(loader::PREFIX . "The RedRover event has already begun.");
             return;
@@ -89,7 +89,7 @@ use pocketmine\world\sound\XpCollectSound;
         $player->setInGame(true, "RedRover");
     }
 
-    public function HandlePlayerLeave(TournamentPlayer $player): void {
+    public function HandlePlayerLeave(Player $player): void {
         $this->TeleportSpawn($player, "RedRover");
         $this->AnnouncePlayerLeft($player, "RedRover");
         $player->getInventory()->clearAll();
@@ -101,7 +101,7 @@ use pocketmine\world\sound\XpCollectSound;
         unset($this->players[array_search($player, $this->players, true)]);
     }
 
-    public function HandleSpectators(TournamentPlayer $player): void {
+    public function HandleSpectators(Player $player): void {
         $this->TeleportArena($player, "RedRover");
         $player->setGamemode(GameMode::SPECTATOR);
         $player->setInGame(true, "RedRover");

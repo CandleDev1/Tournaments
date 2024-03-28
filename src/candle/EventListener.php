@@ -3,14 +3,13 @@
 namespace candle;
 
 use candle\Forms\FormUtils;
+use candle\Session\SessionFactory;
 use candle\Tournament\TournamentTypes\RedRover;
 use candle\Tournament\TournamentTypes\Sumo;
-use pocketmine\block\BlockTypeIds;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
-use pocketmine\event\player\PlayerCreationEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\event\player\PlayerJoinEvent;
@@ -19,13 +18,7 @@ use pocketmine\item\VanillaItems;
 
 class EventListener implements Listener
 {
-
-    public function PlayerCreationEvent(PlayerCreationEvent $event) {
-        $event->setPlayerClass(TournamentPlayer::class);
-    }
-
     public function PlayerJoinEvent(PlayerJoinEvent $event): void {
-
         $event->getPlayer()->getInventory()->setItem(4, VanillaItems::EMERALD()->setCustomName("§bTournamenet §f(right click to use)"));
     }
 
@@ -53,16 +46,15 @@ class EventListener implements Listener
             $killer = $event->getDamager();
             $RedRover = loader::getInstance()->redrover;
             $Sumo = loader::getInstance()->sumo;
-            if ($player instanceof TournamentPlayer and $killer instanceof TournamentPlayer) {
-                if($killer->isInGame("RedRover") === true || $player->isInGame("RedRover") === true) {
-                    if ($RedRover->state === RedRover::waiting || $RedRover->state === RedRover::countdown || loader::getInstance()->redrover->getTeam($player) === loader::getInstance()->redrover->getTeam($killer)) {
-                        $event->cancel();
-                    }
+            $session = SessionFactory::getSession($player);
+            if($session->isInTournament("RedRover") === true) {
+                if ($RedRover->state === RedRover::waiting || $RedRover->state === RedRover::countdown || loader::getInstance()->redrover->getTeam($player) === loader::getInstance()->redrover->getTeam($killer)) {
+                    $event->cancel();
                 }
-                if($player->isInGame("Sumo") === true) {
-                    if($Sumo->state === Sumo::waiting) {
-                        $event->cancel();
-                    }
+            }
+            if($session->isInTournament("Sumo") === true) {
+                if($Sumo->state === Sumo::waiting || $Sumo->state === Sumo::countdown) {
+                    $event->cancel();
                 }
             }
         }
@@ -82,30 +74,29 @@ class EventListener implements Listener
         $event->setDrops([]);
         $RedRover = loader::getInstance()->redrover;
         $Sumo = loader::getInstance()->sumo;
-
-        if($player instanceof TournamentPlayer){
-            if($player->isInGame("RedRover") === true) {
-                $RedRover->HandleSpectators($player);
-                $RedRover->kickTeam($player);
-            }elseif($player->isInGame("Sumo")) {
-                $Sumo->HandleSpectators($player);
-            }
+        $session = SessionFactory::getSession($player);
+        if($session->isInTournament("RedRover") === true) {
+            $RedRover->HandleSpectators($player);
+            $RedRover->kickTeam($player);
+        }elseif($session->isInTournament("Sumo") === true) {
+            $Sumo->HandleSpectators($player);
         }
     }
 
     public function PlayerChatEvent(PlayerChatEvent $event): void {
         $player = $event->getPlayer();
         $message = $event->getMessage();
+        $RedRover = loader::getInstance()->redrover;
+        $Sumo = loader::getInstance()->sumo;
+        $session = SessionFactory::getSession($player);
         if($message === "leave") {
-            if($player instanceof TournamentPlayer) {
-                if($player->isInGame("RedRover") === true) {
-                    loader::getInstance()->redrover->HandlePlayerLeave($player);
-                    $event->cancel();
-                }elseif($player->isInGame("Sumo") === true) {
-                    loader::getInstance()->sumo->HandlePlayerLeave($player);
-                    $event->cancel();
-                }
+            if($session->isInTournament("RedRover") === true) {
+                $RedRover->HandlePlayerLeave($player);
+                $event->cancel();
             }
+        }elseif ($session->isInTournament("Sumo") === true) {
+            $Sumo->HandlePlayerLeave($player);
+            $event->cancel();
         }
     }
 }

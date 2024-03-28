@@ -5,6 +5,7 @@ namespace candle\Tournament\TournamentTypes;
 use AllowDynamicProperties;
 use candle\loader;
 use candle\Scoreboard\ScoreboardManager;
+use candle\Session\SessionFactory;
 use candle\Tournament\Tournament;
 use candle\TournamentPlayer;
 use pocketmine\item\VanillaItems;
@@ -71,7 +72,7 @@ use pocketmine\world\Position;
         $this->setUpArena($player);
     }
 
-    public function HandlePlayerJoin(TournamentPlayer $player): void {
+    public function HandlePlayerJoin(Player $player): void {
         if($this->state === Sumo::playing) {
             $player->sendMessage(loader::PREFIX . "The Sumo event has already begun.");
             return;
@@ -82,25 +83,25 @@ use pocketmine\world\Position;
         $this->TeleportArena($player, "Sumo");
         $this->AnnouncePlayerJoined($player, "Sumo");
         $this->setKit($player, "backlobby");
-        $player->setInGame(true, "Sumo");
+        SessionFactory::getSession($player)->setInTournament(true, "Sumo");
     }
 
-    public function HandlePlayerLeave(TournamentPlayer $player): void {
+    public function HandlePlayerLeave(Player $player): void {
         $this->TeleportSpawn($player, "Sumo");
         $this->AnnouncePlayerLeft($player, "Sumo");
         $player->getInventory()->clearAll();
         $player->getArmorInventory()->clearAll();
         $player->getInventory()->setItem(4, VanillaItems::EMERALD()->setCustomName("§bTournamenet §f(right click to use)"));
         ScoreboardManager::remove($player);
-        $player->setInGame(false, "Sumo");
+        SessionFactory::getSession($player)->setInTournament(false, "Sumo");
         $player->setGamemode(GameMode::SURVIVAL);
         unset($this->players[array_search($player, $this->players, true)]);
     }
 
-    public function HandleSpectators(TournamentPlayer $player): void {
+    public function HandleSpectators(Player $player): void {
         $this->TeleportArena($player, "Sumo");
         $player->setGamemode(GameMode::SPECTATOR);
-        $player->setInGame(true, "Sumo");
+        SessionFactory::getSession($player)->setInTournament(true, "Sumo");
     }
 
 
