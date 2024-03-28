@@ -7,14 +7,14 @@ use pocketmine\player\Player;
 class TournamentPlayer extends Player
 {
 
-    public bool $inGame = false;
+    public ?string $game = null;
 
     public function isInGame(string $tournament) : bool {
-        return $this->inGame;
+        return $this->game === $tournament;
     }
 
     public function setInGame(bool $game, string $tournament) : void {
-        $this->inGame = $game;
+        $this->game = $game ? $tournament : null;
     }
 
 
