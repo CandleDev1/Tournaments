@@ -70,7 +70,6 @@ use pocketmine\world\sound\XpCollectSound;
         }
 
         $this->setupArena($player);
-
     }
 
     public function HandlePlayerJoin(TournamentPlayer $player): void {
@@ -143,10 +142,9 @@ use pocketmine\world\sound\XpCollectSound;
                     return;
                 }
                 if ($this->countdown > 0) {
-                    $this->countdown--;
+                    $c = $this->countdown--;
                     foreach ($this->players as $player) {
-                        $player->sendTitle(TextFormat::MINECOIN_GOLD . gmdate("i:s", $this->countdown));
-                        //Still debating which sound i wanne use
+                        $player->sendTitle(TextFormat::MINECOIN_GOLD . gmdate("i:s", $c));
                         $player->getWorld()->addSound(new Vector3($player->getPosition()->getX(), $player->getPosition()->getY(), $player->getPosition()->getZ()), new XpCollectSound());
                     }
                     $this->fight = false;
