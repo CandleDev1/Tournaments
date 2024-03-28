@@ -4,6 +4,8 @@ namespace candle;
 
 use candle\Forms\FormUtils;
 use candle\Tournament\TournamentTypes\RedRover;
+use candle\Tournament\TournamentTypes\Sumo;
+use pocketmine\block\BlockTypeIds;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
@@ -12,6 +14,7 @@ use pocketmine\event\player\PlayerCreationEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\item\VanillaItems;
 
 class EventListener implements Listener
@@ -44,16 +47,26 @@ class EventListener implements Listener
         $cause = $event->getCause();
         if ($cause === EntityDamageEvent::CAUSE_FALL || $cause === EntityDamageEvent::CAUSE_SUFFOCATION) {
             $event->cancel();
+            return;
         }
         if($event instanceof EntityDamageByEntityEvent) {
             $killer = $event->getDamager();
             $RedRover = loader::getInstance()->redrover;
+            $Sumo = loader::getInstance()->sumo;
             if ($player instanceof TournamentPlayer and $killer instanceof TournamentPlayer) {
-                if ($RedRover->state === RedRover::waiting || $RedRover->state === RedRover::countdown || loader::getInstance()->redrover->getTeam($player) === loader::getInstance()->redrover->getTeam($killer)) {
+                if ($RedRover->state === RedRover::waiting || $RedRover->state === RedRover::countdown || loader::getInstance()->redrover->getTeam($player) === loader::getInstance()->redrover->getTeam($killer) || $Sumo->state === Sumo::waiting || $Sumo->state === Sumo::countdown) {
                     $event->cancel();
-                    return;
                 }
             }
+        }
+    }
+
+
+    public function PlayerMoveEvent(PlayerMoveEvent $event): void {
+        $player = $event->getPlayer();
+        $sumo = loader::getInstance()->sumo;
+        if($sumo->state === Sumo::playing and $player->isSwimming() === true) {
+            $sumo->HandlePlayerLeave($player);
         }
     }
 

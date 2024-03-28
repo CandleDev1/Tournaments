@@ -48,6 +48,16 @@ TournamentWorlds:
     y: 90
     z: 0
     world: "mine"
+  SumoPlayer1:
+    x: 0
+    y: 90
+    z: 0
+    world: "mine"
+  SumoPlayer2:
+    x: 0
+    y: 90
+    z: 0
+    world: "mine"
   Spawn:
     x: 120
     y: 120

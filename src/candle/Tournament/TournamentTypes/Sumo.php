@@ -34,17 +34,6 @@ use pocketmine\world\Position;
     /** @var Player[] */
     public array $players = [];
 
-
-    /**
-     * @var Player|null
-     */
-    public $opponent_1 = null;
-
-    /**
-     * @var Player|null
-     */
-    public $opponent_2 = null;
-
     public int $rounds = 0;
 
     public function setUpArena(Player $player): void {
@@ -123,6 +112,20 @@ use pocketmine\world\Position;
             return;
         }
 
+        $this->fight = true;
+        $config = loader::getInstance()->getConfig();
+        shuffle($this->players);
+        $RandomPlayer = array_slice($this->players, 0,2);
+
+
+        $spawn = [new Position($config->getNested("TournamentWorlds.SumoPlayer1.x"), $config->getNested("TournamentWorlds.SumoPlayer1.y"), $config->getNested("TournamentWorlds.SumoPlayer1.z"), Server::getInstance()->getWorldManager()->getWorldByName($config->getNested("TournamentWorlds.SumoPlayer1.world"))), new Position($config->getNested("TournamentWorlds.SumoPlayer2.x"), $config->getNested("TournamentWorlds.SumoPlayer2.y"), $config->getNested("TournamentWorlds.SumoPlayer2.z"), Server::getInstance()->getWorldManager()->getWorldByName($config->getNested("TournamentWorlds.SumoPlayer2.world")))];
+        foreach ($RandomPlayer as $index => $player) {
+            $player->teleport($spawn[$index]);
+            $player->getInventory()->clearAll();
+            $player->getArmorInventory()->clearAll();
+            $this->setKit($player, "Sumo");
+            $this->AnnounceTournamentStarted("Sumo");
+        }
 
     }
 
@@ -155,17 +158,20 @@ use pocketmine\world\Position;
                 } else {
                     foreach ($this->players as $player) {
                         $this->HandlePlayerLeave($player);
+                        $this->state = Sumo::idle;
+                        $this->countdown = 10;
                     }
                 }
                 if($this->fight) {
                     if($this->fightcooldown !== null and $this->fightcooldown > 0) {
-                        $this->opponent_1->sendTitle(TextFormat::GOLD . $this->fightcooldown);
-                        $this->opponent_2->sendTitle(TextFormat::GOLD . $this->fightcooldown);
-                        $this->fightcooldown--;
+                        foreach ($this->players as $player) {
+                            $player->sendTitle(TextFormat::GOLD . $this->fightcooldown);
+                            $this->fightcooldown--;
+                        }
                     } elseif ($this->fightcooldown !== null and $this->fightcooldown <= 0) {
-                        $this->opponent_1->setNoClientPredictions(false);
-                        $this->opponent_1->setNoClientPredictions(false);
-                        $this->fightcooldown = null;
+                        foreach ($this->players as $player) {
+                            $this->fightcooldown = null;
+                        }
                     }
                 }
                 break;

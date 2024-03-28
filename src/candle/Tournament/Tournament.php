@@ -43,8 +43,7 @@ abstract class Tournament {
     public function TeleportSpawn(Player $player, string $tournament): void {
         $config = loader::getInstance()->getConfig();
         match ($tournament) {
-            "RedRover" => $player->teleport(new Position($config->getNested("TournamentWorlds.Spawn.x"),$config->getNested("TournamentWorlds.Spawn.y"),$config->getNested("TournamentWorlds.Spawn.z"), Server::getInstance()->getWorldManager()->getWorldByName($config->getNested("TournamentWorlds.Spawn.world")))),
-            "Sumo" => $player->teleport(new Position($config->getNested("TournamentWorlds.Spawn.x"),$config->getNested("TournamentWorlds.Spawn.y"),$config->getNested("TournamentWorlds.Spawn.z"), Server::getInstance()->getWorldManager()->getWorldByName($config->getNested("TournamentWorlds.Spawn.world")))),
+            "RedRover", "Sumo" => $player->teleport(new Position($config->getNested("TournamentWorlds.Spawn.x"),$config->getNested("TournamentWorlds.Spawn.y"),$config->getNested("TournamentWorlds.Spawn.z"), Server::getInstance()->getWorldManager()->getWorldByName($config->getNested("TournamentWorlds.Spawn.world")))),
             default => ""
         };
     }

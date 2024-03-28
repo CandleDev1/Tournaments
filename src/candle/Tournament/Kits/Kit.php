@@ -75,7 +75,7 @@ class Kit
 
     public static function Sumo(Player $player): void
     {
-        $player->getEffects()->add(new EffectInstance(VanillaEffects::RESISTANCE(), 90000, 10));
+//        $player->getEffects()->add(new EffectInstance(VanillaEffects::RESISTANCE(), 90000, 5));
         $player->getInventory()->setItem(0,VanillaItems::STICK());
     }
 

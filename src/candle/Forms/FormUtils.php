@@ -113,7 +113,7 @@ class FormUtils
         if($startedTournamentSumo) {
             $playerCount = count(Server::getInstance()->getWorldManager()->getWorldByName(loader::getInstance()->getConfig()->getNested("TournamentWorlds.Sumo.world"))->getPlayers());
             $buttonsumo = new Button("Sumo\nPlayers: " . $playerCount);
-            $buttonsumo->setSubmitListener(function (TournamentPlayer $player) {
+            $buttonsumo->setSubmitListener(function (Player $player) {
                 $sumo = loader::getInstance()->sumo;
                 if($player->isInGame("Sumo") === true) {
                     $player->sendMessage( loader::getInstance()->getConfig()->get("prefix"). loader::getInstance()->getConfig()->getNested( "messages.Sumo.AlreadyInTournament"));
