@@ -20,8 +20,13 @@ messages:
     SpectateTournament: "You have started spectating the Tournament Sumo"
     AnnounceTournamentStarted: "Sumo Tournament has started use /tournament spectate"
     AlreadyInTournament: "You are already in the Sumo Tournament"
-  CommandMessages:
-  #soon
+  BuildUHC:
+    StartTournament: "BuildUHC event has begun use /tournament join BuildUHC to enter the Tournament!"
+    PlayerJoinTournament: " has joined the BuildUHC Tournament!"
+    PlayerLeaveTournament: "You have left the BuildUHC Tournament"
+    SpectateTournament: "You have started spectating the Tournament BuildUHC"
+    AnnounceTournamentStarted: "BuildUHC Tournament has started use /tournament spectate"
+    AlreadyInTournament: "You are already in the BuildUHC Tournament"
 
 TournamentWorlds:
   #RedRover's main world or waiting world depending on how you want it keep in mind they teleport to somewhere else when the game starts u can edit that below by changing,
@@ -58,6 +63,21 @@ TournamentWorlds:
     y: 90
     z: 0
     world: "mine"
+  BuildUHC:
+    x: 0
+    y: 90
+    z: 0
+    world: "mines"
+  BuildUHC1:
+    x: 0
+    y: 90
+    z: 0
+    world: "mines"
+  BuildUHC2:
+    x: 0
+    y: 90
+    z: 0
+    world: "mines"
   Spawn:
     x: 120
     y: 120

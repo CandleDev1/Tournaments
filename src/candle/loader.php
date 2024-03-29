@@ -6,6 +6,7 @@ use AllowDynamicProperties;
 use candle\Session\SessionListener;
 use candle\Tasks\TournamentTick;
 use candle\Tournament\TournamentSystem;
+use candle\Tournament\TournamentTypes\BuildUHC;
 use candle\Tournament\TournamentTypes\RedRover;
 use candle\Tournament\TournamentTypes\Sumo;
 use pocketmine\plugin\PluginBase;
@@ -19,6 +20,7 @@ use pocketmine\utils\SingletonTrait;
     const PREFIX = "§cTournament §r";
     public RedRover $redrover;
     public Sumo $sumo;
+    public BuildUHC $buildUHC;
 
     public function onLoad(): void
     {
@@ -38,6 +40,7 @@ use pocketmine\utils\SingletonTrait;
         
         $this->redrover = new RedRover();
         $this->sumo = new Sumo();
+        $this->buildUHC = new BuildUHC();
         $this->Tournament = new TournamentSystem();
         $this->getScheduler()->scheduleRepeatingTask(new TournamentTick($this), 20);
         $this->getServer()->getWorldManager()->loadWorld("lunar_spawn");

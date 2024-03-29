@@ -19,6 +19,7 @@ class TournamentTick extends Task
     {
       $this->loader->redrover->tick();
       $this->loader->sumo->tick();
+      $this->loader->buildUHC->tick();
     }
 
 }

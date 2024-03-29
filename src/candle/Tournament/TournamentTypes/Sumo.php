@@ -38,7 +38,7 @@ use pocketmine\world\Position;
 
     public function setUpArena(Player $player): void {
         $this->loadArena($player, "Sumo");
-        $this->AnnounceTournamentStarted("Sumo");
+        $this->AnnounceTournament("Sumo");
         $this->state = Sumo::waiting;
     }
 
@@ -161,6 +161,7 @@ use pocketmine\world\Position;
                         $this->HandlePlayerLeave($player);
                         $this->state = Sumo::idle;
                         $this->countdown = 10;
+
                     }
                 }
                 if($this->fight) {

@@ -4,6 +4,7 @@ namespace candle;
 
 use candle\Forms\FormUtils;
 use candle\Session\SessionFactory;
+use candle\Tournament\TournamentTypes\BuildUHC;
 use candle\Tournament\TournamentTypes\RedRover;
 use candle\Tournament\TournamentTypes\Sumo;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -57,9 +58,13 @@ class EventListener implements Listener
                     $event->cancel();
                 }
             }
+            if($session->isInTournament("BuildUHC") === true) {
+                if($Sumo->state === BuildUHC::waiting || $Sumo->state === BuildUHC::countdown) {
+                    $event->cancel();
+                }
+            }
         }
     }
-
 
     public function PlayerMoveEvent(PlayerMoveEvent $event): void {
         $player = $event->getPlayer();
