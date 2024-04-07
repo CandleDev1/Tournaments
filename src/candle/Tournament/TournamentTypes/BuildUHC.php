@@ -19,18 +19,18 @@ use pocketmine\math\Vector3;
 #[AllowDynamicProperties] class BuildUHC extends Tournament
 {
 
-    const int idle = 0;
-    const int waiting = 1;
-    const int countdown = 2;
-    const int playing = 3;
+    const  idle = 0;
+    const  waiting = 1;
+    const  countdown = 2;
+    const  playing = 3;
 
-    public bool $fight = false;
-    public int $state = BuildUHC::idle;
+    public  $fight = false;
+    public  $state = BuildUHC::idle;
 
-    public int $countdown = 10;
+    public  $countdown = 10;
 
     /** @var Player[] */
-    public array $players = [];
+    public  $players = [];
 
     public function setUpArena(Player $player): void {
         $this->loadArena($player, "BuildUHC");
@@ -170,30 +170,32 @@ use pocketmine\math\Vector3;
     {
         $states = [BuildUHC::idle => "Idle", BuildUHC::waiting => "Waiting", BuildUHC::countdown => "Countdown", BuildUHC::playing => "Running"];
         foreach ($this->players as $player) {
-            switch ($this->state) {
-                case BuildUHC::waiting:
-                    ScoreboardManager::new($player, "1", "§c§bTournaments");
-                    ScoreboardManager::setLine($player, 1, '');
-                    ScoreboardManager::setLine($player, 2, "§bTournament: " . TextFormat::WHITE . "BuildUHC");
-                    ScoreboardManager::setLine($player, 3, "§bPlayers: " . TextFormat::WHITE . count($this->players));
-                    ScoreboardManager::setLine($player, 4, "§bStatus: " . TextFormat::WHITE . $states[$this->state]);
-                    ScoreboardManager::setLine($player, 5, "§f");
-                    break;
-                case BuildUHC::countdown:
-                    ScoreboardManager::new($player, "2","§c§bTournaments");
-                    ScoreboardManager::setLine($player, 1, '');
-                    ScoreboardManager::setLine($player, 2, "§bTournament: " . TextFormat::WHITE . "(BuildUHC)");
-                    ScoreboardManager::setLine($player, 3, "§bPlayers: " . TextFormat::WHITE . count($this->players));
-                    ScoreboardManager::setLine($player, 4, "§bStarting in: " . TextFormat::WHITE . gmdate("i:s", $this->countdown));
-                    ScoreboardManager::setLine($player, 5, "§f");
-                    break;
-                case BuildUHC::playing:
-                    ScoreboardManager::new($player, "3", "§c§bTournaments");
-                    ScoreboardManager::setLine($player, 1, TextFormat::GRAY . '');
-                    ScoreboardManager::setLine($player, 2, "§bEvent " . TextFormat::WHITE . "(BuildUHC)");
-                    ScoreboardManager::setLine($player, 3, "§bPlayers: " . TextFormat::WHITE . count($this->players));
+            if ($player->isOnline()) {
+                switch ($this->state) {
+                    case BuildUHC::waiting:
+                        ScoreboardManager::new($player, "1", "§c§bTournaments");
+                        ScoreboardManager::setLine($player, 1, '');
+                        ScoreboardManager::setLine($player, 2, "§bTournament: " . TextFormat::WHITE . "BuildUHC");
+                        ScoreboardManager::setLine($player, 3, "§bPlayers: " . TextFormat::WHITE . count($this->players));
+                        ScoreboardManager::setLine($player, 4, "§bStatus: " . TextFormat::WHITE . $states[$this->state]);
+                        ScoreboardManager::setLine($player, 5, "§f");
+                        break;
+                    case BuildUHC::countdown:
+                        ScoreboardManager::new($player, "2", "§c§bTournaments");
+                        ScoreboardManager::setLine($player, 1, '');
+                        ScoreboardManager::setLine($player, 2, "§bTournament: " . TextFormat::WHITE . "(BuildUHC)");
+                        ScoreboardManager::setLine($player, 3, "§bPlayers: " . TextFormat::WHITE . count($this->players));
+                        ScoreboardManager::setLine($player, 4, "§bStarting in: " . TextFormat::WHITE . gmdate("i:s", $this->countdown));
+                        ScoreboardManager::setLine($player, 5, "§f");
+                        break;
+                    case BuildUHC::playing:
+                        ScoreboardManager::new($player, "3", "§c§bTournaments");
+                        ScoreboardManager::setLine($player, 1, TextFormat::GRAY . '');
+                        ScoreboardManager::setLine($player, 2, "§bEvent " . TextFormat::WHITE . "(BuildUHC)");
+                        ScoreboardManager::setLine($player, 3, "§bPlayers: " . TextFormat::WHITE . count($this->players));
 //                    ScoreboardManager::setLine($player, 4, "§bTeam: " . TextFormat::WHITE . $this->getTeam($player));
-                    ScoreboardManager::setLine($player, 4, "§f");
+                        ScoreboardManager::setLine($player, 4, "§f");
+                }
             }
         }
     }

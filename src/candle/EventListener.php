@@ -16,6 +16,8 @@ use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\item\VanillaItems;
+use pocketmine\network\mcpe\protocol\CameraPacket;
+use pocketmine\network\mcpe\protocol\CameraShakePacket;
 
 class EventListener implements Listener
 {
@@ -104,4 +106,6 @@ class EventListener implements Listener
             $event->cancel();
         }
     }
+
+    
 }

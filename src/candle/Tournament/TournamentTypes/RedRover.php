@@ -23,18 +23,18 @@ use pocketmine\world\sound\XpCollectSound;
 
 #[AllowDynamicProperties] class RedRover extends Tournament {
 
-    const int idle = 0;
-    const int waiting = 1;
-    const int countdown = 2;
-    const int playing = 3;
+    const  idle = 0;
+    const  waiting = 1;
+    const  countdown = 2;
+    const  playing = 3;
 
-    public bool $fight = false;
-    public int $state = RedRover::idle;
+    public  $fight = false;
+    public  $state = RedRover::idle;
 
-    public int $countdown = 10;
+    public  $countdown = 10;
 
     /** @var Player[] */
-    public array $players = [];
+    public  $players = [];
 
 
     public function setUpArena(Player $player): void {
@@ -98,7 +98,7 @@ use pocketmine\world\sound\XpCollectSound;
         $player->getInventory()->setItem(4, VanillaItems::EMERALD()->setCustomName("§bTournamenet §f(right click to use)"));
         ScoreboardManager::remove($player);
         SessionFactory::getSession($player)->setInTournament(false, "RedRover");
-
+        $this->countdown = 10;
         $player->setGamemode(GameMode::SURVIVAL);
         unset($this->players[array_search($player, $this->players, true)]);
     }
@@ -173,30 +173,32 @@ use pocketmine\world\sound\XpCollectSound;
     {
         $states = [RedRover::idle => "Idle", RedRover::waiting => "Waiting", RedRover::countdown => "Countdown", RedRover::playing => "Running"];
         foreach ($this->players as $player) {
-            switch ($this->state) {
-                case RedRover::waiting:
-                    ScoreboardManager::new($player, "1", "§c§bTournaments");
-                    ScoreboardManager::setLine($player, 1, '');
-                    ScoreboardManager::setLine($player, 2, "§bTournament: " . TextFormat::WHITE . "RedRover");
-                    ScoreboardManager::setLine($player, 3, "§bPlayers: " . TextFormat::WHITE . count($this->players));
-                    ScoreboardManager::setLine($player, 4, "§bStatus: " . TextFormat::WHITE . $states[$this->state]);
-                    ScoreboardManager::setLine($player, 5, "§f");
-                    break;
-                case RedRover::countdown:
-                    ScoreboardManager::new($player, "2","§c§bTournaments");
-                    ScoreboardManager::setLine($player, 1, '');
-                    ScoreboardManager::setLine($player, 2, "§bTournament: " . TextFormat::WHITE . "(RedRover)");
-                    ScoreboardManager::setLine($player, 3, "§bPlayers: " . TextFormat::WHITE . count($this->players));
-                    ScoreboardManager::setLine($player, 4, "§bStarting in: " . TextFormat::WHITE . gmdate("i:s", $this->countdown));
-                    ScoreboardManager::setLine($player, 5, "§f");
-                    break;
-                case RedRover::playing:
-                    ScoreboardManager::new($player, "3", "§c§bTournaments");
-                    ScoreboardManager::setLine($player, 1, TextFormat::GRAY . '');
-                    ScoreboardManager::setLine($player, 2, "§bEvent " . TextFormat::WHITE . "(RedRover)");
-                    ScoreboardManager::setLine($player, 3, "§bPlayers: " . TextFormat::WHITE . count($this->players));
-                    ScoreboardManager::setLine($player, 4, "§bTeam: " . TextFormat::WHITE . $this->getTeam($player));
-                    ScoreboardManager::setLine($player, 5, "§f");
+            if ($player->isOnline()) {
+                switch ($this->state) {
+                    case RedRover::waiting:
+                        ScoreboardManager::new($player, "1", "§c§bTournaments");
+                        ScoreboardManager::setLine($player, 1, '');
+                        ScoreboardManager::setLine($player, 2, "§bTournament: " . TextFormat::WHITE . "RedRover");
+                        ScoreboardManager::setLine($player, 3, "§bPlayers: " . TextFormat::WHITE . count($this->players));
+                        ScoreboardManager::setLine($player, 4, "§bStatus: " . TextFormat::WHITE . $states[$this->state]);
+                        ScoreboardManager::setLine($player, 5, "§f");
+                        break;
+                    case RedRover::countdown:
+                        ScoreboardManager::new($player, "2", "§c§bTournaments");
+                        ScoreboardManager::setLine($player, 1, '');
+                        ScoreboardManager::setLine($player, 2, "§bTournament: " . TextFormat::WHITE . "(RedRover)");
+                        ScoreboardManager::setLine($player, 3, "§bPlayers: " . TextFormat::WHITE . count($this->players));
+                        ScoreboardManager::setLine($player, 4, "§bStarting in: " . TextFormat::WHITE . gmdate("i:s", $this->countdown));
+                        ScoreboardManager::setLine($player, 5, "§f");
+                        break;
+                    case RedRover::playing:
+                        ScoreboardManager::new($player, "3", "§c§bTournaments");
+                        ScoreboardManager::setLine($player, 1, TextFormat::GRAY . '');
+                        ScoreboardManager::setLine($player, 2, "§bEvent " . TextFormat::WHITE . "(RedRover)");
+                        ScoreboardManager::setLine($player, 3, "§bPlayers: " . TextFormat::WHITE . count($this->players));
+                        ScoreboardManager::setLine($player, 4, "§bTeam: " . TextFormat::WHITE . $this->getTeam($player));
+                        ScoreboardManager::setLine($player, 5, "§f");
+                }
             }
         }
     }
